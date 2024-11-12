@@ -16,7 +16,7 @@ class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         # Lista todos os clientes
         if self.path == "/clientes":
-            self._send_response(200, clientes)
+            self._send_response(200, customers)
         # Retorna 404 para outras rotas GET não implementadas
         else:
             self._send_response(404, {"message": "Rota não encontrada."})
@@ -30,7 +30,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             cliente_data = json.loads(body)
             cliente_data['id'] = next_id
             next_id += 1
-            clientes.append(cliente_data)
+            customers.append(cliente_data)
             self._send_response(201, cliente_data)
         else:
             self._send_response(404, {"message": "Rota não encontrada."})
