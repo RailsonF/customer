@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Fila</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .output {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .output h2 {
+            margin: 0 0 10px;
+            color: #555;
+        }
+
+        .output p {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gerenciamento de Fila</h1>
+    <button class="button" onclick="gerarSenha()">Gerar Senha</button>
+    <button class="button" onclick="chamarSenha()">Chamar Próxima Senha</button>
+
+    <div class="output" id="output">
+        <h2>Resultado</h2>
+        <p id="response">Clique em um botão para começar.</p>
+    </div>
+
+    <script>
+        const apiUrl = "http://localhost:8080";
+
+        async function gerarSenha() {
+            try {
+                const response = await fetch(`${apiUrl}/gerar-senha`, { method: "POST" });
+                const data = await response.json();
+                exibirResposta(data.senha ? `Senha gerada: ${data.senha}` : "Erro ao gerar senha.");
+            } catch (error) {
+                exibirResposta("Erro: não foi possível conectar à API.");
+            }
+        }
+
+        async function chamarSenha() {
+            try {
+                const response = await fetch(`${apiUrl}/chamar-senha`);
+                if (response.status === 200) {
+                    const data = await response.json();
+                    exibirResposta(`Senha chamada: ${data.senha}`);
+                } else if (response.status === 204) {
+                    exibirResposta("Não há senhas na fila.");
+                } else {
+                    exibirResposta("Erro ao chamar senha.");
+                }
+            } catch (error) {
+                exibirResposta("Erro: não foi possível conectar à API.");
+            }
+        }
+
+        function exibirResposta(mensagem) {
+            const responseElement = document.getElementById("response");
+            responseElement.textContent = mensagem;
+        }
+    </script>
+</body>
+</html>
