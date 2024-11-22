@@ -1,6 +1,3 @@
-
-
-
 #pegar uma senha (clientes)
 #chamar uma senha (atendente)
 #listar todas as senhas pendentes (ambos)
